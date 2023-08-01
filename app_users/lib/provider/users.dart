@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:app_users/data/dummy_users.dart';
 import 'package:flutter/material.dart';
 
@@ -16,5 +18,37 @@ class Users with ChangeNotifier {
 
   User byIndex(int i) {
     return _items.values.elementAt(i);
+  }
+
+  void put(User user) {
+    if (user.id.trim().isNotEmpty && _items.containsKey(user.id)) {
+      _items.update(
+        user.id,
+        (_) => User(
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          avatarUrl: user.avatarUrl,
+        ),
+      );
+    } else {
+      final id = Random().nextDouble().toString();
+      _items.putIfAbsent(
+        id,
+        () => User(
+          id: id,
+          name: user.name,
+          email: user.email,
+          avatarUrl: user.avatarUrl,
+        ),
+      );
+    }
+
+    notifyListeners();
+  }
+
+  void remove(User user) {
+    _items.remove(user.id);
+    notifyListeners();
   }
 }

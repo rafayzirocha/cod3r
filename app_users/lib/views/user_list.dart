@@ -1,4 +1,5 @@
 import 'package:app_users/components/user_tile.dart';
+import 'package:app_users/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +22,11 @@ class UserList extends StatelessWidget {
         itemBuilder: (ctx, i) => UserTile(users.byIndex(i)),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pushNamed(
+            AppRoutes.userForm,
+          );
+        },
         backgroundColor: const Color(0xFF0066FF),
         child: const Icon(
           Icons.add,
