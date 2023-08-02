@@ -4,11 +4,33 @@ import 'package:provider/provider.dart';
 
 import '../provider/users.dart';
 
-class UserForm extends StatelessWidget {
+class UserForm extends StatefulWidget {
   UserForm({super.key});
 
+  @override
+  State<UserForm> createState() => _UserFormState();
+}
+
+class _UserFormState extends State<UserForm> {
   final _form = GlobalKey<FormState>();
+
   final Map<String, String> _formData = {};
+
+  void _loadFormData(User user) {
+    _formData['id'] = user.id;
+    _formData['name'] = user.name;
+    _formData['email'] = user.email;
+    _formData['avatarUrl'] = user.avatarUrl;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final user = ModalRoute.of(context)?.settings.arguments as User?;
+    if (user != null) {
+      _loadFormData(user);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +68,7 @@ class UserForm extends StatelessWidget {
           child: Column(
             children: <Widget>[
               TextFormField(
+                initialValue: _formData['name'],
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Informe um nome';
@@ -59,6 +82,7 @@ class UserForm extends StatelessWidget {
                 decoration: const InputDecoration(labelText: 'Nome'),
               ),
               TextFormField(
+                initialValue: _formData['email'],
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Informe um email';
@@ -69,6 +93,7 @@ class UserForm extends StatelessWidget {
                 decoration: const InputDecoration(labelText: 'Email'),
               ),
               TextFormField(
+                initialValue: _formData['avatarUrl'],
                 decoration: const InputDecoration(labelText: 'URL do Avatar'),
                 onSaved: (value) => _formData['avatarUrl'] = value!,
               ),
